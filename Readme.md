@@ -107,15 +107,7 @@ const styles = StyleSheet.create({
   - Ve a la [página de descarga de Node.js](https://nodejs.org/) y descarga la versión recomendada para la mayoría de los usuarios.
   - Sigue las instrucciones de instalación para tu sistema operativo.
 
-### 2. Instalación de Expo CLI
-
-- **Expo CLI:** Expo es una herramienta que simplifica la creación y administración de proyectos React Native.
-- **Instalación:**
-  ```bash
-  npm install -g expo-cli
-  ```
-
-### 3. Creación de una cuenta en Expo
+### 2. Creación de una cuenta en Expo
 
 - Cuenta en Expo: Tener una cuenta te permite utilizar funcionalidades adicionales como el almacenamiento en la nube y la colaboración en proyectos.
 - Registro:
@@ -126,60 +118,41 @@ const styles = StyleSheet.create({
 expo register
 ```
 
-### 4. Creación de un proyecto básico con Expo
+### 3. Creación de un proyecto básico con Expo
 
 Crear un proyecto:
 
 ```bash
-expo init MiPrimeraApp
+npx create-expo-app@latest
+npx create-expo-app myApp --template blank
 ```
 
-- Estructura del proyecto:
-  - Selecciona una plantilla (por ejemplo, blank para empezar desde cero).
-  - Sigue las instrucciones en pantalla para configurar el proyecto.
-
-### 5. Ejecución del proyecto en un emulador o dispositivo físico
+### 4. Ejecución del proyecto en un emulador o dispositivo físico
 
 Iniciar el proyecto:
 
 ```bash
 cd MiPrimeraApp
-expo start
+npm install
+npm start
 ```
 
 - Ejecutar en un dispositivo físico:
 
   - Instala la aplicación Expo Go desde la App Store (iOS) o Google Play Store (Android).
+
+    - [Expo Go en App Store](https://apps.apple.com/us/app/expo-go/id982107779)
+    - [Expo Go en Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
+
   - Escanea el código QR que aparece en la terminal o en el navegador con la aplicación Expo Go para ejecutar tu proyecto en el dispositivo.
 
 - Ejecutar en un emulador:
   - iOS: Necesitarás Xcode instalado en tu Mac. Abre Xcode y configura un emulador.
   - Android: Necesitarás Android Studio. Instala Android Studio y configura un dispositivo virtual (AVD).
 
-### 6. Configuración adicional (opcional)
+### 5. Configuración adicional (opcional)
 
 - Configurar ESLint y Prettier: Para mantener la calidad y consistencia del código.
-
-### Resumen de comandos
-
-Instalar Expo CLI:
-
-```bash
-npm install -g expo-cli
-```
-
-Crear un proyecto:
-
-```bash
-expo init MiPrimeraApp
-```
-
-Iniciar el proyecto:
-
-```bash
-cd MiPrimeraApp
-expo start
-```
 
 ## Estilización con StyleSheet
 
