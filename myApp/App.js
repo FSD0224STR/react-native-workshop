@@ -1,20 +1,62 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { BaseLayout } from "./components/Layouts/Base";
 
-export default function App() {
+const MyComponent = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <BaseLayout style={styles.container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => Alert.alert("Botón presionado")}
+      >
+        <Text style={styles.buttonText}>Presióname</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, styles.buttonYellow]}
+        onPress={() => Alert.alert("Botón presionado")}
+      >
+        <Text style={[styles.buttonText, styles.buttonTextYellow]}>
+          Presióname
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => Alert.alert("Botón presionado")}
+      >
+        <Text style={styles.buttonText}>Presióname</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.button, styles.buttonYellow]}
+        onPress={() => Alert.alert("Botón presionado")}
+      >
+        <Text style={[styles.buttonText, styles.buttonTextYellow]}>
+          Presióname
+        </Text>
+      </TouchableOpacity>
+    </BaseLayout>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#cacaca",
+  },
+  button: {
+    borderRadius: 10,
+    alignItems: "center",
+    backgroundColor: "black",
+    padding: 100,
+  },
+  buttonYellow: {
+    backgroundColor: "yellow",
+  },
+  buttonText: {
+    fontSize: 20,
+    color: "white",
+  },
+  buttonTextYellow: {
+    color: "black",
   },
 });
+
+export default MyComponent;

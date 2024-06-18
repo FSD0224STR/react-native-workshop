@@ -228,7 +228,7 @@ React Native proporciona una serie de componentes básicos que son los bloques d
 
 ### 1. View
 
-- **Descripción:** El componente `View` es un contenedor que soporta el diseño con flexbox, estilo, y manejo de toques. Sería **lo más parecido** a un `div` en React.js.
+- **Descripción:** El componente `View` es un contenedor que soporta el diseño con flexbox, estilo, y manejo de toques. Sería "lo más parecido" a un `div` en React.js.
 - **Uso:**
 
   ```javascript
