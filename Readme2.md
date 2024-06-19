@@ -27,7 +27,7 @@ npx expo install react-native-screens react-native-safe-area-context
 Para este ejemplo, instalaremos el stack navigator, que es uno de los navegadores más comunes.
 
 ```bash
-npm install @react-navigation/native-stackb
+npm install @react-navigation/native-stack
 ```
 
 ### 2. Configuración del contenedor de navegación
