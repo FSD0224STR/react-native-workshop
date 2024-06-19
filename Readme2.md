@@ -262,6 +262,18 @@ function ProfileStackScreen() {
 
 ### 3. Anidación de Drawer Navigators
 
+**\*Instalación**
+
+```bash
+npm install @react-navigation/drawer
+```
+
+Esta instalición depende de estas dos librerías:
+
+```bash
+npm install react-native-reanimated react-native-gesture-handler
+```
+
 #### a. Creación de Navegadores de Cajón Anidados
 
 Los drawer navigators permiten mostrar un menú lateral con opciones de navegación.
