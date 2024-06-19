@@ -217,6 +217,12 @@ function ProfileStackScreen() {
 
 #### a. Creación de Navegadores de Pestañas Anidados
 
+Instalar el tab navigator:
+
+```bash
+npm install @react-navigation/bottom-tabs
+```
+
 También puedes anidar tab navigators para gestionar diferentes secciones de tu aplicación.
 
 ```javascript
