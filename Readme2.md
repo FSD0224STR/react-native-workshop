@@ -178,6 +178,153 @@ Añadir una tercera pantalla a la aplicación de navegación y configurar la nav
 3. Añade botones en `HomeScreen` y `DetailsScreen` para navegar a `ProfileScreen`.
 4. Añade un botón en `ProfileScreen` para navegar de vuelta a `HomeScreen`.
 
+### 6. Anidación de navegaciónes en React Navigation
+
+La anidación de navegadores es una técnica común en React Navigation para gestionar flujos de navegación complejos. Puedes anidar navegadores dentro de otros navegadores para crear jerarquías de navegación más avanzadas.
+
+### 1. Anidación de Stack Navigators
+
+#### a. Creación de Navegadores Anidados
+
+Puedes anidar stack navigators para gestionar diferentes flujos de navegación en tu aplicación.
+
+```javascript
+const Stack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Profile" component={ProfileStackScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+```
+
+### 2. Anidación de Tab Navigators
+
+#### a. Creación de Navegadores de Pestañas Anidados
+
+También puedes anidar tab navigators para gestionar diferentes secciones de tu aplicación.
+
+```javascript
+const Tab = createBottomTabNavigator();
+const HomeStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Profile" component={ProfileStackScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Details" component={DetailsScreen} />
+    </HomeStack.Navigator>
+  );
+}
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+```
+
+### 3. Anidación de Drawer Navigators
+
+#### a. Creación de Navegadores de Cajón Anidados
+
+Los drawer navigators permiten mostrar un menú lateral con opciones de navegación.
+
+```javascript
+const Drawer = createDrawerNavigator();
+const HomeStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen name="Home" component={HomeStackScreen} />
+        <Drawer.Screen name="Profile" component={ProfileStackScreen} />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
+
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Details" component={DetailsScreen} />
+    </HomeStack.Navigator>
+  );
+}
+
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
+    </ProfileStack.Navigator>
+  );
+}
+```
+
+### 7. Añadir botones al header de navegación
+
+#### a. Añadir botones al header
+
+Puedes añadir botones al header de navegación utilizando la opción `options` en el componente de pantalla.
+
+```javascript
+<Stack.Screen
+  name="Home"
+  component={HomeScreen}
+  options={{
+    headerLeft: () => (
+      <Button
+        onPress={() => alert("This is a button!")}
+        title="Burger"
+        color="#000"
+      />
+    ),
+    headerTitle: () => <Text>Inicio</Text>,
+    headerRight: () => (
+      <Button
+        onPress={() => alert("This is a button!")}
+        title="Info"
+        color="#000"
+      />
+    ),
+  }}
+/>
+```
+
 ### Uso de APIs nativas en React Native
 
 En el desarrollo de aplicaciones móviles, es común interactuar con APIs nativas del dispositivo (como la cámara, el GPS, o el almacenamiento) y con APIs de terceros (como servicios web RESTful o GraphQL). React Native facilita estas integraciones a través de módulos y bibliotecas específicas.
@@ -224,147 +371,119 @@ Para consumir servicios web externos, podemos usar bibliotecas como `axios` o `f
 1. Instalar `expo-camera`:
 
 ```bash
- expo install expo-camera
+ npx expo install expo-camera
+```
+
+2. app.json config
+
+Add these lines to your app.json file:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "recordAudioAndroid": true
+        }
+      ]
+    ]
+  }
+}
 ```
 
 2. Configuración y permisos:
 
 ```javascript
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import { Camera } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
+import { useState } from "react";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const CameraExample = () => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [cameraRef, setCameraRef] = useState(null);
-  const [photo, setPhoto] = useState(null);
+export default function App() {
+  const [facing, setFacing] = useState("back");
+  const [permission, requestPermission] = useCameraPermissions();
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
-
-  if (hasPermission === null) {
-    return <Text>Solicitando permiso para usar la cámara...</Text>;
+  if (!permission) {
+    // Camera permissions are still loading.
+    return <View />;
   }
-  if (hasPermission === false) {
-    return <Text>No se ha concedido permiso para usar la cámara</Text>;
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
+
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
   }
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} ref={(ref) => setCameraRef(ref)} />
-      <Button
-        title="Tomar foto"
-        onPress={async () => {
-          if (cameraRef) {
-            const photo = await cameraRef.takePictureAsync();
-            setPhoto(photo.uri);
-          }
-        }}
-      />
-      {photo && <Image source={{ uri: photo }} style={styles.photo} />}
+      <CameraView style={styles.camera} facing={facing}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+            <Text style={styles.text}>Flip Camera</Text>
+          </TouchableOpacity>
+        </View>
+      </CameraView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
   },
   camera: {
     flex: 1,
-    aspectRatio: 1,
   },
-  photo: {
-    width: 100,
-    height: 100,
-  },
-});
-
-export default CameraExample;
-```
-
-#### b. Obtener la ubicación con `expo-location`
-
-1. Instalar `expo-location`:
-
-```bash
-expo install expo-location
-```
-
-2. Configuración y permisos:
-
-```javascript
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import * as Location from "expo-location";
-
-const LocationExample = () => {
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permiso para acceder a la ubicación denegado");
-        return;
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
-  }, []);
-
-  let text = "Esperando..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.paragraph}>{text}</Text>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
+  buttonContainer: {
     flex: 1,
-    justifyContent: "center",
+    flexDirection: "row",
+    backgroundColor: "transparent",
+    margin: 64,
+  },
+  button: {
+    flex: 1,
+    alignSelf: "flex-end",
     alignItems: "center",
   },
-  paragraph: {
-    fontSize: 18,
-    textAlign: "center",
+  text: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
   },
 });
-
-export default LocationExample;
 ```
 
-3. Obtener y mostrar la ubicación:
-   - Implementar el código para obtener y mostrar la ubicación del usuario.
+3. Capturar una imagen:
+   - Implementar el código para capturar una imagen utilizando la cámara del dispositivo.
 
-### 4. Ejercicio práctico
+```javascript
+const targetPixelCount = 1080; // If you want full HD pictures
+const pixelRatio = PixelRatio.get(); // The pixel ratio of the device
+// pixels * pixelRatio = targetPixelCount, so pixels = targetPixelCount / pixelRatio
+const pixels = targetPixelCount / pixelRatio;
 
-#### Objetivo
-
-Crear una aplicación que utilice tanto una API nativa
-
-#### Instrucciones
-
-a. **Capturar una imagen**:
-
-2. **Obtener la ubicación**:
-   - Utilizar `expo-location` para obtener la ubicación actual del usuario.
+const result = await captureRef(this.imageContainer, {
+  result: "tmpfile",
+  height: pixels,
+  width: pixels,
+  quality: 1,
+  format: "png",
+});
+```
 
 ### 5. Conclusión
 
